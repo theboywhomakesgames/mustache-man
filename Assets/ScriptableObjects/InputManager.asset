@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa09af86b3824f499ed079a1b47df9f, type: 3}
+  m_Name: InputManager
+  m_EditorClassIdentifier: 
+  walkRight:
+    isMouse: 0
+    key: 100
+    mouseButton: 0
+  walkLeft:
+    isMouse: 0
+    key: 97
+    mouseButton: 0
+  jump:
+    isMouse: 0
+    key: 32
+    mouseButton: 0
+  shoot:
+    isMouse: 1
+    key: 0
+    mouseButton: 0
+  reload:
+    isMouse: 0
+    key: 114
+    mouseButton: 0
+  slowMo:
+    isMouse: 0
+    key: 102
+    mouseButton: 0
