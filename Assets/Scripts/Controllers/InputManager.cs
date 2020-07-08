@@ -36,14 +36,34 @@ public class InputManager : MonoBehaviour
 			person.Move(1);
 		}
 
+		if (Input.GetKey(im.walkLeft.key))
+		{
+			person.Move(-1);
+		}
+
 		if (Input.GetKeyDown(im.walkRight.key))
 		{
-			person.StartMoving();
+			person.StartMovingForward();
 		}
 
 		if (Input.GetKeyUp(im.walkRight.key))
 		{
-			person.StopMoving();
+			person.StopMovingForward();
+		}
+
+		if (Input.GetKeyDown(im.walkLeft.key))
+		{
+			person.StartMovingBackwards();
+		}
+
+		if (Input.GetKeyUp(im.walkLeft.key))
+		{
+			person.StopMovingBackwards();
+		}
+
+		if (Input.GetKeyDown(im.jump.key))
+		{
+			person.Jump();
 		}
 	}
 	#endregion

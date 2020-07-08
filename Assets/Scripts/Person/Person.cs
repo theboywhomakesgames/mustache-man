@@ -29,19 +29,41 @@ public class Person : SimpleObj
 	#endregion
 
 	#region PublicFunctions
+
+	public void Jump()
+	{
+		rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+	}
+
 	public void Move(int dir)
 	{
 		rb.velocity = dir * Vector2.right * moveSpeed + new Vector2(0, rb.velocity.y);
 	}
 
-	public void StartMoving()
+	public void StartMovingForward()
 	{
-		animator.SetBool("Walking", true);
+		animator.SetBool("WalkingForward", true);
 	}
 
-	public void StopMoving()
+	public void StartMovingBackwards()
 	{
-		animator.SetBool("Walking", false);
+		animator.SetBool("WalkingBackwards", true);
+	}
+
+	public void StopMovingForward()
+	{
+		animator.SetBool("WalkingForward", false);
+	}
+
+	public void StopMovingBackwards()
+	{
+		animator.SetBool("WalkingBackwards", false);
+	}
+
+	public void Flip()
+	{
+		isFacingRight = !isFacingRight;
+		transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 	}
 	#endregion
 
