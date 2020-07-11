@@ -8,7 +8,8 @@ public class Inputs : ScriptableObject
     public SimpleInput walkRight;
     public SimpleInput walkLeft;
     public SimpleInput jump;
-    public SimpleInput shoot;
+    public SimpleInput rightHandInteract;
+    public SimpleInput leftHandInteract;
     public SimpleInput reload;
     public SimpleInput slowMo;
 }

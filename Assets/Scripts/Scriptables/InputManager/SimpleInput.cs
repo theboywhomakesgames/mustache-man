@@ -8,5 +8,5 @@ public class SimpleInput
 {
     public bool isMouse;
     public KeyCode key;
-    public MouseButton mouseButton;
+    public int mouseButton;
 }

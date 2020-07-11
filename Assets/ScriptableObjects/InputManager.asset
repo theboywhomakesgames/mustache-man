@@ -24,10 +24,14 @@ MonoBehaviour:
     isMouse: 0
     key: 32
     mouseButton: 0
-  shoot:
+  rightHandInteract:
     isMouse: 1
     key: 0
     mouseButton: 0
+  leftHandInteract:
+    isMouse: 1
+    key: 0
+    mouseButton: 1
   reload:
     isMouse: 0
     key: 114

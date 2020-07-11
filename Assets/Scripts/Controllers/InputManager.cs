@@ -65,6 +65,11 @@ public class InputManager : MonoBehaviour
 		{
 			person.Jump();
 		}
+
+		if (Input.GetMouseButtonDown(im.rightHandInteract.mouseButton))
+		{
+			person.RightHandInteract();
+		}
 	}
 	#endregion
 }
