@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Object;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
@@ -17,10 +19,12 @@ public class Person : SimpleObj
 	//[Header("ints")]
 	[Header("bools")]
 	public bool rightHandFull;
+	[NonSerialized]
+	public bool movingForward, movingBackward;
 	[Header("GO, Transforms")]
 	public Animator animator;
 	public Transform righthandPos, rightArm;
-	public SimpleObj rightHandContaining;
+	public InteractableObj rightHandContaining;
 	public Vector2 target;
 	#endregion
 
@@ -51,6 +55,7 @@ public class Person : SimpleObj
 
 	public void StartMovingForward()
 	{
+		movingForward = true;
 		if (isFacingRight)
 		{
 			animator.SetBool("WalkingForward", true);
@@ -63,6 +68,7 @@ public class Person : SimpleObj
 
 	public void StartMovingBackwards()
 	{
+		movingBackward = true;
 		if (isFacingRight)
 		{
 			animator.SetBool("WalkingBackwards", true);
@@ -83,6 +89,7 @@ public class Person : SimpleObj
 		{
 			animator.SetBool("WalkingBackwards", false);
 		}
+		movingForward = false;
 	}
 
 	public void StopMovingBackwards()
@@ -95,6 +102,7 @@ public class Person : SimpleObj
 		{
 			animator.SetBool("WalkingForward", false);
 		}
+		movingBackward = false;
 	}
 
 	public void Flip()

@@ -71,7 +71,7 @@ public class InputManager : MonoBehaviour
 			controller.SlowMoSwitch();
 		}
 
-		if (Input.GetMouseButtonDown(im.rightHandInteract.mouseButton))
+		if (Input.GetMouseButton(im.rightHandInteract.mouseButton))
 		{
 			controller.RightHandInteract();
 		}

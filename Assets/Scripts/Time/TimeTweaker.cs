@@ -8,6 +8,7 @@ public class TimeTweaker : MonoBehaviour
 	[Header("TimeTweaker vars")]
 
 	#region StaticProperties
+	public static bool isSlow;
 	#endregion
 
 	#region PublicVars
@@ -24,7 +25,6 @@ public class TimeTweaker : MonoBehaviour
 	private float scaleRatio;
 	//[Header("ints")]
 	//[Header("bools")]
-	private bool isSlow;
 	//[Header("GO, Transforms")]
 	private Tweener curTweenerTS, curTweenerDT;
 	#endregion
@@ -34,24 +34,17 @@ public class TimeTweaker : MonoBehaviour
 	{
 		try
 		{
-			curTweenerTS.Kill();
-			curTweenerDT.Kill();
+			KillTweeners();
 		}
 		catch { }
 
 		if (isSlow)
 		{
-			curTweenerTS = DOTween.To(() => Time.deltaTime, (float x) => { Time.timeScale = x; }, 1, transitionDuration).SetUpdate(true);
-			curTweenerDT = DOTween.To(() => Time.fixedDeltaTime, (float x) => { Time.fixedDeltaTime = x; }, scaleRatio, transitionDuration).SetUpdate(true);
-
-			isSlow = false;
+			NormalizeTS();
 		}
 		else
 		{
-			curTweenerTS = DOTween.To(() => Time.deltaTime, (float x) => { Time.timeScale = x; }, sloMoFactor, transitionDuration).SetUpdate(true);
-			curTweenerDT = DOTween.To(() => Time.fixedDeltaTime, (float x) => { Time.fixedDeltaTime = x; }, sloMoFactor * scaleRatio, transitionDuration).SetUpdate(true);
-
-			isSlow = true;
+			SlowTS();
 		}
 	}
 	#endregion
@@ -59,9 +52,29 @@ public class TimeTweaker : MonoBehaviour
 	#region PrivateFunctions
 	private void Start()
 	{
-		ObjectHolder.Instance.dictionary.Add("tt", this);
 		scaleRatio = Time.fixedDeltaTime / Time.timeScale;
 		print(scaleRatio);
+		NormalizeTS();
+	}
+
+	private void KillTweeners()
+	{
+		curTweenerTS.Kill();
+		curTweenerDT.Kill();
+	}
+
+	private void SlowTS()
+	{
+		isSlow = true;
+		curTweenerTS = DOTween.To(() => Time.deltaTime, (float x) => { Time.timeScale = x; }, sloMoFactor, transitionDuration).SetUpdate(true);
+		curTweenerDT = DOTween.To(() => Time.fixedDeltaTime, (float x) => { Time.fixedDeltaTime = x; }, sloMoFactor * scaleRatio, transitionDuration).SetUpdate(true);
+	}
+
+	private void NormalizeTS()
+	{
+		isSlow = false;
+		curTweenerTS = DOTween.To(() => Time.deltaTime, (float x) => { Time.timeScale = x; }, 1, transitionDuration).SetUpdate(true);
+		curTweenerDT = DOTween.To(() => Time.fixedDeltaTime, (float x) => { Time.fixedDeltaTime = x; }, scaleRatio, transitionDuration).SetUpdate(true);
 	}
 	#endregion
 }

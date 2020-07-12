@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Object;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class BasicGun : SimpleObj
+public class BasicGun : InteractableObj
 {
 	[Header("BasicGun vars")]
 
@@ -23,8 +24,10 @@ public class BasicGun : SimpleObj
 
 	#region PrivateVars
 	//[Header("floats")]
+	private float _time;
 	//[Header("ints")]
 	//[Header("bools")]
+	private bool _isCoolingDown;
 	//[Header("GO, Transforms")]
 	#endregion
 
@@ -37,10 +40,15 @@ public class BasicGun : SimpleObj
 
 	public void Shoot()
 	{
-		Vector2 diff = holder.target - (Vector2)transform.position;
-		diff = diff.normalized;
-		GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
-		blt.GetComponent<SimpleBullet>().GetShot(diff);
+		if (!_isCoolingDown)
+		{
+			_time = 0;
+			_isCoolingDown = true;
+			Vector2 diff = holder.target - (Vector2)transform.position;
+			diff = diff.normalized;
+			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
+			blt.GetComponent<SimpleBullet>().GetShot(diff);
+		}
 	}
 
 	public void Rotate(Vector2 towards)
@@ -53,6 +61,19 @@ public class BasicGun : SimpleObj
 	protected override void Start()
 	{
 		base.Start();
+	}
+
+	private void Update()
+	{
+		if (_isCoolingDown)
+		{
+			_time += Time.deltaTime;
+			if(_time >= coolDown)
+			{
+				_time = 0;
+				_isCoolingDown = false;
+			}
+		}
 	}
 	#endregion
 }

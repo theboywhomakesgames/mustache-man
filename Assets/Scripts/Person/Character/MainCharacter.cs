@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TimeTweaker))]
 public class MainCharacter : Person
 {
 	[Header("MainCharacter vars")]
@@ -23,17 +24,13 @@ public class MainCharacter : Person
 	//[Header("ints")]
 	//[Header("bools")]
 	//[Header("GO, Transforms")]
+	TimeTweaker tt;
 	#endregion
 
 	#region PublicFunctions
 	public void SlowMoSwitch()
 	{
-		try
-		{
-			TimeTweaker tt = (TimeTweaker)ObjectHolder.Instance.GetObjWithKey("tt");
-			tt.Switch();
-		}
-		catch { }
+		tt.Switch();
 	}
 	#endregion
 
@@ -41,6 +38,7 @@ public class MainCharacter : Person
 	protected override void Start()
 	{
 		base.Start();
+		tt = GetComponent<TimeTweaker>();
 	}
 
 	private void Update()
