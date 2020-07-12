@@ -26,6 +26,15 @@ public class MainCharacter : Person
 	#endregion
 
 	#region PublicFunctions
+	public void SlowMoSwitch()
+	{
+		try
+		{
+			TimeTweaker tt = (TimeTweaker)ObjectHolder.Instance.GetObjWithKey("tt");
+			tt.Switch();
+		}
+		catch { }
+	}
 	#endregion
 
 	#region PrivateFunctions

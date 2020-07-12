@@ -27,9 +27,11 @@ public class Person : SimpleObj
 	#region PrivateVars
 	//[Header("floats")]
 	//[Header("ints")]
+	protected int collidings = 0;
 	//[Header("bools")]
 	protected bool isFacingRight = true;
 	protected bool isRunning, isJumping, isSliding;
+	protected bool grounded;
 	//[Header("GO, Transforms")]
 	#endregion
 
@@ -37,7 +39,8 @@ public class Person : SimpleObj
 
 	public void Jump()
 	{
-		rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+		if(grounded)
+			rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
 	}
 
 	public void Move(int dir)
@@ -48,22 +51,50 @@ public class Person : SimpleObj
 
 	public void StartMovingForward()
 	{
-		animator.SetBool("WalkingForward", true);
+		if (isFacingRight)
+		{
+			animator.SetBool("WalkingForward", true);
+		}
+		else
+		{
+			animator.SetBool("WalkingBackwards", true);
+		}
 	}
 
 	public void StartMovingBackwards()
 	{
-		animator.SetBool("WalkingBackwards", true);
+		if (isFacingRight)
+		{
+			animator.SetBool("WalkingBackwards", true);
+		}
+		else
+		{
+			animator.SetBool("WalkingForward", true);
+		}
 	}
 
 	public void StopMovingForward()
 	{
-		animator.SetBool("WalkingForward", false);
+		if (isFacingRight)
+		{
+			animator.SetBool("WalkingForward", false);
+		}
+		else
+		{
+			animator.SetBool("WalkingBackwards", false);
+		}
 	}
 
 	public void StopMovingBackwards()
 	{
-		animator.SetBool("WalkingBackwards", false);
+		if (isFacingRight)
+		{
+			animator.SetBool("WalkingBackwards", false);
+		}
+		else
+		{
+			animator.SetBool("WalkingForward", false);
+		}
 	}
 
 	public void Flip()
@@ -115,6 +146,18 @@ public class Person : SimpleObj
 		{
 			rightHandContaining.GetPickedUpBy(this);
 		}
+	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		collidings++;
+		grounded = collidings > 0;
+	}
+
+	private void OnCollisionExit2D(Collision2D collision)
+	{
+		collidings--;
+		grounded = collidings > 0;
 	}
 	#endregion
 }

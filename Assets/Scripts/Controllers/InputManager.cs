@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
 	//[Header("bools")]
 	[Header("GO, Transforms")]
 	public Inputs im;
-	public Person person;
+	public MainCharacter controller;
 	#endregion
 
 	#region PrivateVars
@@ -33,42 +33,47 @@ public class InputManager : MonoBehaviour
 	{
 		if (Input.GetKey(im.walkRight.key))
 		{
-			person.Move(1);
+			controller.Move(1);
 		}
 
 		if (Input.GetKey(im.walkLeft.key))
 		{
-			person.Move(-1);
+			controller.Move(-1);
 		}
 
 		if (Input.GetKeyDown(im.walkRight.key))
 		{
-			person.StartMovingForward();
+			controller.StartMovingForward();
 		}
 
 		if (Input.GetKeyUp(im.walkRight.key))
 		{
-			person.StopMovingForward();
+			controller.StopMovingForward();
 		}
 
 		if (Input.GetKeyDown(im.walkLeft.key))
 		{
-			person.StartMovingBackwards();
+			controller.StartMovingBackwards();
 		}
 
 		if (Input.GetKeyUp(im.walkLeft.key))
 		{
-			person.StopMovingBackwards();
+			controller.StopMovingBackwards();
 		}
 
 		if (Input.GetKeyDown(im.jump.key))
 		{
-			person.Jump();
+			controller.Jump();
+		}
+
+		if (Input.GetKeyDown(im.slowMo.key))
+		{
+			controller.SlowMoSwitch();
 		}
 
 		if (Input.GetMouseButtonDown(im.rightHandInteract.mouseButton))
 		{
-			person.RightHandInteract();
+			controller.RightHandInteract();
 		}
 	}
 	#endregion

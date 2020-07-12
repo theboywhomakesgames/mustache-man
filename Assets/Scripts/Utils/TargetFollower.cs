@@ -17,7 +17,7 @@ public class TargetFollower : MonoBehaviour
 	public float duration;
 	//[Header("ints")]
 	//[Header("bools")]
-	//[Header("GO, Transforms")]
+	[Header("GO, Transforms")]
 	public Transform target;
 	public Vector2 offset;
 	#endregion
@@ -47,7 +47,12 @@ public class TargetFollower : MonoBehaviour
 
 		if(diff.x > width/2 || diff.y > height / 2)
 		{
-			transform.DOMove(new Vector3(target.position.x + offset.x, target.position.y + offset.y, transform.position.z), duration);
+			diff = target.position - transform.position;
+			transform.position = new Vector3(
+				diff.x * Time.deltaTime / duration + transform.position.x,
+				diff.y * Time.deltaTime / duration + transform.position.y,
+				transform.position.z
+			);
 		}
 	}
 	#endregion
