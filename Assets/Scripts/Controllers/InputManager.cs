@@ -53,12 +53,12 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetKeyDown(im.walkLeft.key))
 		{
-			controller.StartMovingBackwards();
+			controller.StartMovingBackward();
 		}
 
 		if (Input.GetKeyUp(im.walkLeft.key))
 		{
-			controller.StopMovingBackwards();
+			controller.StopMovingBackward();
 		}
 
 		if (Input.GetKeyDown(im.jump.key))

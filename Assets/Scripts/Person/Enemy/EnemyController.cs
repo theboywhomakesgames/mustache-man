@@ -57,22 +57,40 @@ public class EnemyController : MonoBehaviour
 
 		if (Mathf.Abs(targetDiff.x) > deathRadius)
 		{
-			if (self.movingForward)
+			if (targetDiff.x > 0)
 			{
-				self.Move(1);
+				if (self.movingForward)
+				{
+					self.Move(1);
+				}
+				else
+				{
+					self.StartMovingForward();
+				}
 			}
 			else
 			{
-				self.StartMovingForward();
+				if (self.movingBackward)
+				{
+					self.Move(-1);
+				}
+				else
+				{
+					self.StartMovingBackward();
+				}
 			}
 		}
 		else
 		{
 			self.StopMovingForward();
+			self.StopMovingBackward();
 		}
 
-		self.AimAt(targetDiff.normalized);
-		self.RightHandInteract();
+		if (targetDiff.magnitude < senseRadius)
+		{
+			self.AimAt(targetDiff.normalized);
+			self.RightHandInteract();
+		}
 	}
 	#endregion
 }

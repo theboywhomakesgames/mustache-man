@@ -66,7 +66,7 @@ public class Person : SimpleObj
 		}
 	}
 
-	public void StartMovingBackwards()
+	public void StartMovingBackward()
 	{
 		movingBackward = true;
 		if (isFacingRight)
@@ -92,7 +92,7 @@ public class Person : SimpleObj
 		movingForward = false;
 	}
 
-	public void StopMovingBackwards()
+	public void StopMovingBackward()
 	{
 		if (isFacingRight)
 		{
