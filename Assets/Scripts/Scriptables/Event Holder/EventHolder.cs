@@ -1,31 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class EventHolder : MonoBehaviour
+[CreateAssetMenu(menuName = "SO/EventHolder")]
+public class EventHolder : ScriptableObject
 {
-	[Header("EventHolder vars")]
+    public UnityEvent e;
 
-	#region StaticProperties
-	#endregion
-
-	#region PublicVars
-	//[Header("floats")]
-	//[Header("ints")]
-	//[Header("bools")]
-	//[Header("GO, Transforms")]
-	#endregion
-
-	#region PrivateVars
-	//[Header("floats")]
-	//[Header("ints")]
-	//[Header("bools")]
-	//[Header("GO, Transforms")]
-	#endregion
-
-	#region PublicFunctions
-	#endregion
-
-	#region PrivateFunctions
-	#endregion
+    public virtual void Excecute()
+    {
+        e?.Invoke();
+    }
 }

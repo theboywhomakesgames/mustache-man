@@ -14,6 +14,7 @@ public class SimpleBullet : SimpleObj
 	#region PublicVars
 	[Header("floats")]
 	public float shootSpeed = 20;
+	public float damage = 20;
 	//[Header("ints")]
 	[Header("bools")]
 	public bool testing = true;
@@ -26,6 +27,7 @@ public class SimpleBullet : SimpleObj
 	//[Header("ints")]
 	//[Header("bools")]
 	//[Header("GO, Transforms")]
+	private Vector2 vel;
 	#endregion
 
 	#region PublicFunctions
@@ -39,9 +41,28 @@ public class SimpleBullet : SimpleObj
 	protected override void Start()
 	{
 		base.Start();
+		try
+		{
+			CollisionEvent ce = GetComponentInChildren<CollisionEvent>();
+			ce.onEnter += OnCollisionEnterCB;
+		}
+		catch { }
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision)
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		int layer = collision.gameObject.layer;
+		if (layer == 9 || layer == 10)
+		{
+			try
+			{
+				collision.gameObject.GetComponent<Person>().Damage(damage, transform.position.x, transform.position.y, rb.velocity.x, rb.velocity.y);
+			}
+			catch { }
+		}
+	}
+
+	private void OnCollisionEnterCB(Collision2D collision)
 	{
 		ContactPoint2D contactPoint = collision.GetContact(0);
 		Instantiate(sparkPrefab, transform.position - (Vector3)contactPoint.normal * 0.05f, Quaternion.FromToRotation(Vector3.left, contactPoint.normal));

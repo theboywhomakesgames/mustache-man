@@ -52,7 +52,8 @@ public class TimeTweaker : MonoBehaviour
 	#region PrivateFunctions
 	private void Start()
 	{
-		scaleRatio = Time.fixedDeltaTime / Time.timeScale;
+		scaleRatio = 0.01f;
+		Time.fixedDeltaTime = 0.01f;
 		print(scaleRatio);
 		NormalizeTS();
 	}

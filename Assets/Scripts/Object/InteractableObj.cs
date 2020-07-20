@@ -10,7 +10,10 @@ namespace Assets.Scripts.Object
     public class InteractableObj : SimpleObj
     {
         public Person holder;
-        private bool hasHolder = false;
+		public GameObject colliders;
+
+		private bool hasHolder = false;
+
 		public virtual void InteractWith()
 		{
 
@@ -18,6 +21,11 @@ namespace Assets.Scripts.Object
 
 		public virtual void GetPickedUpBy(Person picker)
 		{
+			try
+			{
+				colliders.SetActive(false);
+			}
+			catch { }
 			rb.bodyType = RigidbodyType2D.Kinematic;
 			hasHolder = true;
 			holder = picker;
@@ -27,6 +35,13 @@ namespace Assets.Scripts.Object
 
 		public virtual void GetDropped(Vector2 force)
 		{
+			try
+			{
+				colliders.SetActive(true);
+			}
+			catch { }
+			holder.rightHandContaining = null;
+			holder.rightHandFull = false;
 			rb.bodyType = RigidbodyType2D.Dynamic;
 			hasHolder = false;
 			holder = null;

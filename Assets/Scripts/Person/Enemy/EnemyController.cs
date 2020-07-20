@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
 	//[Header("ints")]
 	[Header("bools")]
 	public bool walkforwardTest;
+	public bool dontShoot;
 	//[Header("GO, Transforms")]
 	#endregion
 
@@ -89,7 +90,8 @@ public class EnemyController : MonoBehaviour
 		if (targetDiff.magnitude < senseRadius)
 		{
 			self.AimAt(targetDiff.normalized);
-			self.RightHandInteract();
+			if(!dontShoot)
+				self.RightHandInteract();
 		}
 	}
 	#endregion

@@ -20,6 +20,8 @@ public class BasicGun : InteractableObj
 	[Header("GO, Transforms")]
 	public GameObject bulletPrefab;
 	public Transform hole;
+	public Sprite inHandSprite, droppedSprite;
+	public SpriteRenderer sr;
 	#endregion
 
 	#region PrivateVars
@@ -44,7 +46,7 @@ public class BasicGun : InteractableObj
 		{
 			_time = 0;
 			_isCoolingDown = true;
-			Vector2 diff = holder.target - (Vector2)transform.position;
+			Vector2 diff = holder.target - (Vector2)holder.rightArm.position;
 			diff = diff.normalized;
 			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
 			blt.GetComponent<SimpleBullet>().GetShot(diff);
@@ -55,11 +57,24 @@ public class BasicGun : InteractableObj
 	{
 		transform.right = towards;
 	}
+
+	public override void GetPickedUpBy(Person picker)
+	{
+		sr.sprite = inHandSprite;
+		base.GetPickedUpBy(picker);
+	}
+
+	public override void GetDropped(Vector2 force)
+	{
+		sr.sprite = droppedSprite;
+		base.GetDropped(force);
+	}
 	#endregion
 
 	#region PrivateFunctions
 	protected override void Start()
 	{
+		sr = GetComponent<SpriteRenderer>();
 		base.Start();
 	}
 

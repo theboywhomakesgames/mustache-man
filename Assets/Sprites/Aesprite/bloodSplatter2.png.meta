@@ -1,13 +1,25 @@
 fileFormatVersion: 2
-guid: 2d29ea5cebc96ed4eb8290f042011ee9
+guid: 595ccfdf07d8a344a8149a6abd17843e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7335101798021011885
-    second: hand-pistol_0
+      213: 5654321617131905346
+    second: bloodSplatter2_0
   - first:
-      213: -2670394243479786580
-    second: hand-pistol_1
+      213: 2531151450647452405
+    second: bloodSplatter2_1
+  - first:
+      213: -2428054808394292889
+    second: bloodSplatter2_2
+  - first:
+      213: 5870461991269255799
+    second: bloodSplatter2_3
+  - first:
+      213: -4062206762491969955
+    second: bloodSplatter2_4
+  - first:
+      213: 2062500534750260779
+    second: bloodSplatter2_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -129,34 +141,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hand-pistol_0
+      name: bloodSplatter2_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 29
-        width: 3
-        height: 2
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da91f56e8348bc560800000000000000
-      internalID: 7335101798021011885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hand-pistol_1
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 29
-        width: 3
-        height: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +155,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: caba32b759ad0fad0800000000000000
-      internalID: -2670394243479786580
+      spriteID: 241a5fa8d8f287e40800000000000000
+      internalID: 5654321617131905346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bloodSplatter2_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fa5e8075d4702320800000000000000
+      internalID: 2531151450647452405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bloodSplatter2_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 761aa722401dd4ed0800000000000000
+      internalID: -2428054808394292889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bloodSplatter2_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a4909f312187150800000000000000
+      internalID: 5870461991269255799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bloodSplatter2_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5ef975d87420a7c0800000000000000
+      internalID: -4062206762491969955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bloodSplatter2_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2ea7da0f497f9c10800000000000000
+      internalID: 2062500534750260779
       vertices: []
       indices: 
       edges: []

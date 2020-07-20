@@ -15,10 +15,13 @@ public class Person : SimpleObj
 
 	#region PublicVars
 	[Header("floats")]
+	public float health = 100;
 	public float moveSpeed = 10, jumpSpeed = 15;
+	public float deathKick = 50;
 	//[Header("ints")]
 	[Header("bools")]
 	public bool rightHandFull;
+	public bool isAlive = true;
 	[NonSerialized]
 	public bool movingForward, movingBackward;
 	[Header("GO, Transforms")]
@@ -26,6 +29,8 @@ public class Person : SimpleObj
 	public Transform righthandPos, rightArm;
 	public InteractableObj rightHandContaining;
 	public Vector2 target;
+	public GameObject bloodDropPref, bloodPSPref;
+	public EventHolder onDeath, onDamage;
 	#endregion
 
 	#region PrivateVars
@@ -37,96 +42,131 @@ public class Person : SimpleObj
 	protected bool isRunning, isJumping, isSliding;
 	protected bool grounded;
 	//[Header("GO, Transforms")]
+	protected Vector2 lastAssualtPos;
+	protected Vector2 lastAssualtDir;
 	#endregion
 
 	#region PublicFunctions
 
 	public void Jump()
 	{
-		if(grounded)
-			rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+		if(isAlive)
+		{
+			if (grounded)
+				rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+		}
 	}
 
 	public void Move(int dir)
 	{
-
-		rb.velocity = dir * Vector2.right * moveSpeed + new Vector2(0, rb.velocity.y);
+		if (isAlive)
+		{
+			rb.velocity = dir * Vector2.right * moveSpeed + new Vector2(0, rb.velocity.y);
+		}
 	}
 
 	public void StartMovingForward()
 	{
-		movingForward = true;
-		if (isFacingRight)
+		if (isAlive)
 		{
-			animator.SetBool("WalkingForward", true);
-		}
-		else
-		{
-			animator.SetBool("WalkingBackwards", true);
+			movingForward = true;
+			if (isFacingRight)
+			{
+				animator.SetBool("WalkingForward", true);
+			}
+			else
+			{
+				animator.SetBool("WalkingBackwards", true);
+			}
 		}
 	}
 
 	public void StartMovingBackward()
 	{
-		movingBackward = true;
-		if (isFacingRight)
+		if (isAlive)
 		{
-			animator.SetBool("WalkingBackwards", true);
-		}
-		else
-		{
-			animator.SetBool("WalkingForward", true);
+			movingBackward = true;
+			if (isFacingRight)
+			{
+				animator.SetBool("WalkingBackwards", true);
+			}
+			else
+			{
+				animator.SetBool("WalkingForward", true);
+			}
 		}
 	}
 
 	public void StopMovingForward()
 	{
-		if (isFacingRight)
+		if (isAlive)
 		{
-			animator.SetBool("WalkingForward", false);
+			if (isFacingRight)
+			{
+				animator.SetBool("WalkingForward", false);
+			}
+			else
+			{
+				animator.SetBool("WalkingBackwards", false);
+			}
+			movingForward = false;
 		}
-		else
-		{
-			animator.SetBool("WalkingBackwards", false);
-		}
-		movingForward = false;
 	}
 
 	public void StopMovingBackward()
 	{
-		if (isFacingRight)
+		if (isAlive)
 		{
-			animator.SetBool("WalkingBackwards", false);
+			if (isFacingRight)
+			{
+				animator.SetBool("WalkingBackwards", false);
+			}
+			else
+			{
+				animator.SetBool("WalkingForward", false);
+			}
+			movingBackward = false;
 		}
-		else
-		{
-			animator.SetBool("WalkingForward", false);
-		}
-		movingBackward = false;
 	}
 
 	public void Flip()
 	{
 		isFacingRight = !isFacingRight;
 		transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+		if (movingForward)
+		{
+			StopMovingForward();
+			StartMovingBackward();
+		}
+		else if (movingBackward)
+		{
+			StopMovingBackward();
+			StartMovingForward();
+		}
 	}
 
 	public void AimAt(Vector2 dir)
 	{
-
-		if (dir.x > 0 != isFacingRight)
+		if (isAlive)
 		{
-			Flip();
-		}
+			if (dir.x > 0 != isFacingRight)
+			{
+				Flip();
+			}
 
-		rightArm.right = isFacingRight?dir.normalized:-dir.normalized;
+			rightArm.right = isFacingRight ? dir.normalized : -dir.normalized;
+		}
 	}
 
 	public void RightHandInteract()
 	{
-		if (rightHandFull)
+		if (isAlive)
 		{
-			rightHandContaining.InteractWith();
+			if (rightHandFull)
+			{
+				rightHandContaining.InteractWith();
+			}
 		}
 	}
 
@@ -144,9 +184,61 @@ public class Person : SimpleObj
 	{
 
 	}
+
+	public virtual void Damage(float volume, float x = 0, float y = 0, float bx = 0, float by = 0)
+	{
+		health -= volume;
+		lastAssualtPos = new Vector2(x, y);
+		lastAssualtDir = new Vector2(bx, by).normalized;
+
+		try
+		{
+			onDamage.Excecute();
+		}
+		catch { }
+
+		CheckHealth();
+	}
 	#endregion
 
 	#region PrivateFunctions
+	protected virtual void CheckHealth()
+	{
+		if(health <= 0)
+		{
+			health = 0;
+			Die();
+		}
+	}
+
+	protected virtual void Die()
+	{
+		if (isAlive)
+		{
+			isAlive = false;
+			if (rightHandFull)
+			{
+				rightHandContaining.GetDropped(new Vector2(UnityEngine.Random.Range(-1, 1f), UnityEngine.Random.Range(-1, 1f)).normalized);
+			}
+			rb.constraints = RigidbodyConstraints2D.None;
+			Instantiate(bloodDropPref, lastAssualtPos, Quaternion.identity).GetComponent<BloodDrop>().Throw(lastAssualtDir);
+			Instantiate(bloodPSPref, lastAssualtPos, Quaternion.identity);
+			Vector2 dir = ((Vector2)transform.position - lastAssualtPos).normalized;
+			rb.AddForceAtPosition(lastAssualtDir * 1000 * deathKick * 0.01f / Time.fixedDeltaTime, lastAssualtPos);
+			try
+			{
+				onDeath.Excecute();
+			}
+			catch { }
+		}
+	}
+
+	protected virtual void ComeAlive()
+	{
+		rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+		isAlive = true;
+	}
+
 	protected override void Start()
 	{
 		base.Start();

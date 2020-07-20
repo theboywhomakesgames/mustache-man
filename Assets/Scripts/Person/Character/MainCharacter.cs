@@ -41,6 +41,11 @@ public class MainCharacter : Person
 		tt = GetComponent<TimeTweaker>();
 	}
 
+	protected override void Die()
+	{
+
+	}
+
 	private void Update()
 	{
 		AimAtMouse();
