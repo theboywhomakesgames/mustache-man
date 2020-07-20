@@ -10,6 +10,7 @@ public class Inputs : ScriptableObject
     public SimpleInput jump;
     public SimpleInput rightHandInteract;
     public SimpleInput leftHandInteract;
+    public SimpleInput interact;
     public SimpleInput reload;
     public SimpleInput slowMo;
 }

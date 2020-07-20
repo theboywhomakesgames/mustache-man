@@ -31,6 +31,8 @@ public class Person : SimpleObj
 	public Vector2 target;
 	public GameObject bloodDropPref, bloodPSPref;
 	public EventHolder onDeath, onDamage;
+
+	public List<InteractiveObj> nearbyInteractives = new List<InteractiveObj>();
 	#endregion
 
 	#region PrivateVars
@@ -183,6 +185,15 @@ public class Person : SimpleObj
 	public void PickUp(SimpleObj obj)
 	{
 
+	}
+
+	public void InteractWithNearby()
+	{
+		try
+		{
+			nearbyInteractives[0].Interact(this);
+		}
+		catch { }
 	}
 
 	public virtual void Damage(float volume, float x = 0, float y = 0, float bx = 0, float by = 0)

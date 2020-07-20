@@ -32,6 +32,10 @@ MonoBehaviour:
     isMouse: 1
     key: 0
     mouseButton: 1
+  interact:
+    isMouse: 0
+    key: 101
+    mouseButton: 0
   reload:
     isMouse: 0
     key: 114
