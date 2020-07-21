@@ -43,22 +43,22 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetKeyDown(im.walkRight.key))
 		{
-			controller.StartMovingForward();
+			controller.StartMovingRight();
 		}
 
 		if (Input.GetKeyUp(im.walkRight.key))
 		{
-			controller.StopMovingForward();
+			controller.StopMovingRight();
 		}
 
 		if (Input.GetKeyDown(im.walkLeft.key))
 		{
-			controller.StartMovingBackward();
+			controller.StartMovingLeft();
 		}
 
 		if (Input.GetKeyUp(im.walkLeft.key))
 		{
-			controller.StopMovingBackward();
+			controller.StopMovingLeft();
 		}
 
 		if (Input.GetKeyDown(im.jump.key))
@@ -74,6 +74,11 @@ public class InputManager : MonoBehaviour
 		if (Input.GetKeyDown(im.interact.key))
 		{
 			controller.InteractWithNearby();
+		}
+
+		if (Input.GetKeyDown(im.reverseGravity.key))
+		{
+			controller.ReverseGravity();
 		}
 
 		if (Input.GetMouseButton(im.rightHandInteract.mouseButton))

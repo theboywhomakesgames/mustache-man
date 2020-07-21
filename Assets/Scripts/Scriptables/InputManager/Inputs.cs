@@ -11,6 +11,7 @@ public class Inputs : ScriptableObject
     public SimpleInput rightHandInteract;
     public SimpleInput leftHandInteract;
     public SimpleInput interact;
+    public SimpleInput reverseGravity;
     public SimpleInput reload;
     public SimpleInput slowMo;
 }

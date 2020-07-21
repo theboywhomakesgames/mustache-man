@@ -36,6 +36,10 @@ MonoBehaviour:
     isMouse: 0
     key: 101
     mouseButton: 0
+  reverseGravity:
+    isMouse: 0
+    key: 118
+    mouseButton: 0
   reload:
     isMouse: 0
     key: 114

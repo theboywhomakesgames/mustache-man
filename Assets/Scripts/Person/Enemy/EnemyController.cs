@@ -60,31 +60,31 @@ public class EnemyController : MonoBehaviour
 		{
 			if (targetDiff.x > 0)
 			{
-				if (self.movingForward)
+				if (self.movingRight)
 				{
 					self.Move(1);
 				}
 				else
 				{
-					self.StartMovingForward();
+					self.StartMovingRight();
 				}
 			}
 			else
 			{
-				if (self.movingBackward)
+				if (self.movingLeft)
 				{
 					self.Move(-1);
 				}
 				else
 				{
-					self.StartMovingBackward();
+					self.StartMovingLeft();
 				}
 			}
 		}
 		else
 		{
-			self.StopMovingForward();
-			self.StopMovingBackward();
+			self.StopMovingRight();
+			self.StopMovingLeft();
 		}
 
 		if (targetDiff.magnitude < senseRadius)

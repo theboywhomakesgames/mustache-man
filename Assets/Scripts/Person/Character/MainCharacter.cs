@@ -46,8 +46,19 @@ public class MainCharacter : Person
 
 	}
 
-	private void Update()
+	protected override void OnCollisionEnter2D(Collision2D collision)
 	{
+		base.OnCollisionEnter2D(collision);
+	}
+
+	protected override void OnCollisionExit2D(Collision2D collision)
+	{
+		base.OnCollisionExit2D(collision);
+	}
+
+	protected override void Update()
+	{
+		base.Update();
 		AimAtMouse();
 	}
 

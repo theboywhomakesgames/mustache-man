@@ -16,14 +16,13 @@ public class Person : SimpleObj
 	#region PublicVars
 	[Header("floats")]
 	public float health = 100;
-	public float moveSpeed = 10, jumpSpeed = 15;
+	public float moveSpeed = 10, jumpSpeed = 15, gravityMagnitude = 20;
 	public float deathKick = 50;
 	//[Header("ints")]
 	[Header("bools")]
 	public bool rightHandFull;
 	public bool isAlive = true;
-	[NonSerialized]
-	public bool movingForward, movingBackward;
+	public bool movingRight, movingLeft;
 	[Header("GO, Transforms")]
 	public Animator animator;
 	public Transform righthandPos, rightArm;
@@ -33,6 +32,8 @@ public class Person : SimpleObj
 	public EventHolder onDeath, onDamage;
 
 	public List<InteractiveObj> nearbyInteractives = new List<InteractiveObj>();
+
+	public Vector2 gravity;
 	#endregion
 
 	#region PrivateVars
@@ -42,10 +43,15 @@ public class Person : SimpleObj
 	//[Header("bools")]
 	protected bool isFacingRight = true;
 	protected bool isRunning, isJumping, isSliding;
-	protected bool grounded;
+	protected bool grounded, flipped;
 	//[Header("GO, Transforms")]
 	protected Vector2 lastAssualtPos;
 	protected Vector2 lastAssualtDir;
+
+	protected Vector2 lastVel;
+	protected Vector2 newVel;
+	protected Vector2 acceleration;
+	protected Vector2 myRight = Vector2.right;
 	#endregion
 
 	#region PublicFunctions
@@ -55,7 +61,7 @@ public class Person : SimpleObj
 		if(isAlive)
 		{
 			if (grounded)
-				rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+				rb.velocity = new Vector2(rb.velocity.x, rb.gravityScale * jumpSpeed);
 		}
 	}
 
@@ -63,15 +69,15 @@ public class Person : SimpleObj
 	{
 		if (isAlive)
 		{
-			rb.velocity = dir * Vector2.right * moveSpeed + new Vector2(0, rb.velocity.y);
+			rb.velocity = dir * myRight * moveSpeed + new Vector2(0, rb.velocity.y);
 		}
 	}
 
-	public void StartMovingForward()
+	public void StartMovingRight()
 	{
 		if (isAlive)
 		{
-			movingForward = true;
+			movingRight = true;
 			if (isFacingRight)
 			{
 				animator.SetBool("WalkingForward", true);
@@ -83,11 +89,11 @@ public class Person : SimpleObj
 		}
 	}
 
-	public void StartMovingBackward()
+	public void StartMovingLeft()
 	{
 		if (isAlive)
 		{
-			movingBackward = true;
+			movingLeft = true;
 			if (isFacingRight)
 			{
 				animator.SetBool("WalkingBackwards", true);
@@ -99,35 +105,65 @@ public class Person : SimpleObj
 		}
 	}
 
-	public void StopMovingForward()
+	public void StopMovingRight()
 	{
 		if (isAlive)
 		{
-			if (isFacingRight)
+			if (!flipped)
 			{
-				animator.SetBool("WalkingForward", false);
+				if (isFacingRight)
+				{
+					animator.SetBool("WalkingForward", false);
+				}
+				else
+				{
+					animator.SetBool("WalkingBackwards", false);
+				}
 			}
 			else
 			{
-				animator.SetBool("WalkingBackwards", false);
+				if (isFacingRight)
+				{
+					animator.SetBool("WalkingBackwards", false);
+				}
+				else
+				{
+					animator.SetBool("WalkingForward", false);
+				}
 			}
-			movingForward = false;
+			flipped = false;
+			movingRight = false;
 		}
 	}
 
-	public void StopMovingBackward()
+	public void StopMovingLeft()
 	{
 		if (isAlive)
 		{
-			if (isFacingRight)
+			if (!flipped)
 			{
-				animator.SetBool("WalkingBackwards", false);
+				if (isFacingRight)
+				{
+					animator.SetBool("WalkingBackwards", false);
+				}
+				else
+				{
+					animator.SetBool("WalkingForward", false);
+				}
 			}
 			else
 			{
-				animator.SetBool("WalkingForward", false);
+				if (isFacingRight)
+				{
+					animator.SetBool("WalkingForward", false);
+				}
+				else
+				{
+					animator.SetBool("WalkingBackwards", false);
+				}
 			}
-			movingBackward = false;
+			flipped = false;
+			movingLeft = false;
 		}
 	}
 
@@ -136,16 +172,8 @@ public class Person : SimpleObj
 		isFacingRight = !isFacingRight;
 		transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
-		if (movingForward)
-		{
-			StopMovingForward();
-			StartMovingBackward();
-		}
-		else if (movingBackward)
-		{
-			StopMovingBackward();
-			StartMovingForward();
-		}
+		if(movingLeft || movingRight)
+			flipped = true;
 	}
 
 	public void AimAt(Vector2 dir)
@@ -210,6 +238,13 @@ public class Person : SimpleObj
 
 		CheckHealth();
 	}
+
+	public virtual void ReverseGravity()
+	{
+		transform.up = -transform.up;
+		rb.gravityScale = -rb.gravityScale;
+		myRight = transform.right;
+	}
 	#endregion
 
 	#region PrivateFunctions
@@ -259,13 +294,18 @@ public class Person : SimpleObj
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision)
+	protected virtual void Update()
+	{
+
+	}
+
+	protected virtual void OnCollisionEnter2D(Collision2D collision)
 	{
 		collidings++;
 		grounded = collidings > 0;
 	}
 
-	private void OnCollisionExit2D(Collision2D collision)
+	protected virtual void OnCollisionExit2D(Collision2D collision)
 	{
 		collidings--;
 		grounded = collidings > 0;

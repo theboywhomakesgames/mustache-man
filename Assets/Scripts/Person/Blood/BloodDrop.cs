@@ -24,7 +24,6 @@ public class BloodDrop : SimpleObj
 	private float _time;
 	//[Header("ints")]
 	//[Header("bools")]
-	private bool inSpawnZone = false;
 	//[Header("GO, Transforms")]
 	#endregion
 
@@ -54,26 +53,6 @@ public class BloodDrop : SimpleObj
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		Destroy(gameObject);
-	}
-
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.gameObject.layer == 13)
-		{
-			inSpawnZone = true;
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
-	}
-
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		if(collision.gameObject.layer == 13)
-		{
-			inSpawnZone = false;
-		}
 	}
 	#endregion
 }
