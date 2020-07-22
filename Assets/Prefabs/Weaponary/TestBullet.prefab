@@ -121,7 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1824596458444392670}
   shootSpeed: 40
-  damage: 20
+  damage: 100
   testing: 1
   sparkPrefab: {fileID: 889289218278282137, guid: 0b23d47e9a034cf4c9c354d14f7b5126,
     type: 3}
@@ -162,7 +162,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.4028308, y: 3.374494}
+  m_Size: {x: 3.3631854, y: 1.6759024}
   m_EdgeRadius: 0
 --- !u!1 &7900701399074124881
 GameObject:

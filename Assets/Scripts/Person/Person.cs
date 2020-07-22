@@ -271,6 +271,9 @@ public class Person : SimpleObj
 			Instantiate(bloodPSPref, lastAssualtPos, Quaternion.identity);
 			Vector2 dir = ((Vector2)transform.position - lastAssualtPos).normalized;
 			rb.AddForceAtPosition(lastAssualtDir * 1000 * deathKick * 0.01f / Time.fixedDeltaTime, lastAssualtPos);
+			StopMovingLeft();
+			StopMovingRight();
+			animator.speed = 0;
 			try
 			{
 				onDeath.Excecute();

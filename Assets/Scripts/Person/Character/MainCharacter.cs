@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(TimeTweaker))]
 public class MainCharacter : Person
@@ -43,7 +44,7 @@ public class MainCharacter : Person
 
 	protected override void Die()
 	{
-
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	protected override void OnCollisionEnter2D(Collision2D collision)

@@ -116,8 +116,20 @@ public class EnemyController : MonoBehaviour
 			nextPlace.location = intruder.position;
 			Chase(targetDiff);
 			self.AimAt(targetDiff.normalized);
-			Shoot();
+			if (!dontShoot)
+			{
+				Shoot();
+			}
+			else
+			{
+				Invoke(nameof(EnableShooting), 1);
+			}
 		}
+	}
+
+	private void EnableShooting()
+	{
+		dontShoot = false;
 	}
 
 	private void Shoot()

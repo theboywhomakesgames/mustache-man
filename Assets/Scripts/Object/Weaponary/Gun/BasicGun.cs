@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class BasicGun : InteractableObj
 {
@@ -14,6 +15,8 @@ public class BasicGun : InteractableObj
 	#region PublicVars
 	[Header("floats")]
 	public float coolDown;
+	public float shootingLightDuration = 0.1f;
+	public float shootingSoundRadius = 4;
 	[Header("ints")]
 	public int clipSize = 10;
 	//[Header("bools")]
@@ -22,6 +25,7 @@ public class BasicGun : InteractableObj
 	public Transform hole;
 	public Sprite inHandSprite, droppedSprite;
 	public SpriteRenderer sr;
+	public GameObject shootingLight;
 	#endregion
 
 	#region PrivateVars
@@ -49,7 +53,38 @@ public class BasicGun : InteractableObj
 			Vector2 diff = holder.target - (Vector2)holder.rightArm.position;
 			diff = diff.normalized;
 			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
+			shootingLight.SetActive(true);
+			Invoke(nameof(TurnOffLight), shootingLightDuration);
+			MakeNoise();
 			blt.GetComponent<SimpleBullet>().GetShot(diff);
+		}
+	}
+
+	public void MakeNoise()
+	{
+		int flooridx = 0;
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+		foreach (Collider2D c in colliders)
+		{
+			if(c.gameObject.layer == 15)
+			{
+				try
+				{
+					flooridx = c.GetComponent<Floor>().index;
+				}
+				catch { }
+			}
+		}
+
+		colliders = Physics2D.OverlapCircleAll(transform.position, 5);
+		foreach(Collider2D c in colliders)
+		{
+			if(c.gameObject.layer == 9)
+			{
+				EnemyController ec = c.GetComponent<EnemyController>();
+				ec.nextPlace = new Place(flooridx, transform.position);
+				ec.pathfind = true;
+			}
 		}
 	}
 
@@ -76,6 +111,11 @@ public class BasicGun : InteractableObj
 	{
 		sr = GetComponent<SpriteRenderer>();
 		base.Start();
+	}
+
+	private void TurnOffLight()
+	{
+		shootingLight.SetActive(false);
 	}
 
 	private void Update()
