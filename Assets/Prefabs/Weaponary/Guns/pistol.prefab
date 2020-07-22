@@ -122,7 +122,7 @@ MonoBehaviour:
   rb: {fileID: 5856411342013192541}
   holder: {fileID: 0}
   colliders: {fileID: 7910694476592027410}
-  coolDown: 0.7
+  coolDown: 0.5
   clipSize: 10
   bulletPrefab: {fileID: 1824596458444392668, guid: 4019cc3140198164b8823aafc6872f9a,
     type: 3}
