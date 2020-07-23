@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening.Plugins.Core.PathCore;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental;
 using UnityEngine;
@@ -18,9 +19,9 @@ public class EnemyController : MonoBehaviour
 	//[Header("ints")]
 	[Header("bools")]
 	public bool walkforwardTest;
-	public bool dontShoot, targetFound;
+	public bool dontShoot, targetFound, roaming;
 	public bool interactiveNP;
-	public bool go, pathfind;
+	public bool go, pathfind, arrived = true;
 	public bool postIsStart;
 	//[Header("GO, Transforms")]
 	public Floor myfloor;
@@ -28,11 +29,13 @@ public class EnemyController : MonoBehaviour
 	public Vector2 target;
 	public Place nextPlace;
 	public Place post;
+	public List<Place> nextPlaces = new List<Place>();
 	#endregion
 
 	#region PrivateVars
 	//[Header("floats")]
 	//[Header("ints")]
+	private int roamDir = 0;
 	//[Header("bools")]
 	//[Header("GO, Transforms")]
 	private Person self;
@@ -55,6 +58,8 @@ public class EnemyController : MonoBehaviour
 			interactiveNP = true;
 			go = true;
 		}
+
+		arrived = false;
 	}
 	#endregion
 
@@ -88,43 +93,112 @@ public class EnemyController : MonoBehaviour
 
 	private void Update()
 	{
-		if (!targetFound)
+		if (self.isAlive)
 		{
-			if (pathfind)
+			if (!targetFound)
 			{
-				pathfind = false;
-				GotoPlace();
-			}
-
-			if (go)
-			{
-				Vector2 targetDiff = GetDiffToTarget(target);
-
-				if (interactiveNP)
-				{
-					InteractiveChase(targetDiff);
-				}
-				else
-				{
-					Chase(targetDiff);
-				}
-			}
-		}
-		else
-		{
-			Vector2 targetDiff = GetDiffToTarget(intruder.position);
-			nextPlace.location = intruder.position;
-			Chase(targetDiff);
-			self.AimAt(targetDiff.normalized);
-			if (!dontShoot)
-			{
-				Shoot();
+				NoTargetChase();
 			}
 			else
 			{
-				Invoke(nameof(EnableShooting), 1);
+				ChargeTarget();
 			}
 		}
+	}
+
+	private void ChargeTarget()
+	{
+		Vector2 targetDiff = GetDiffToTarget(intruder.position);
+		nextPlace.location = intruder.position;
+		Chase(targetDiff);
+		self.AimAt(targetDiff.normalized);
+		if (!dontShoot)
+		{
+			Shoot();
+		}
+		else
+		{
+			Invoke(nameof(EnableShooting), 0.5f);
+		}
+	}
+
+	private void NoTargetChase()
+	{
+		if (roaming)
+		{
+			if (!go && arrived)
+			{
+				if(nextPlaces.Count == 0)
+				{
+					Roam();
+				}
+				nextPlace = nextPlaces[0];
+				nextPlaces.RemoveAt(0);
+				pathfind = true;
+			}
+		}
+
+		if (pathfind)
+		{
+			pathfind = false;
+			GotoPlace();
+		}
+
+		if (go)
+		{
+			Vector2 targetDiff = GetDiffToTarget(target);
+			self.AimAt(targetDiff.normalized);
+
+			if (interactiveNP)
+			{
+				InteractiveChase(targetDiff);
+			}
+			else
+			{
+				if(!arrived)
+					Chase(targetDiff);
+			}
+		}
+	}
+
+	private void Roam()
+	{
+		if(roamDir == 0)
+			roamDir = Random.Range(0, 0.99f) > 0.5f ? -1 : 1;
+
+		int floorIdx = myfloor.house.floors.IndexOf(myfloor);
+		int nxtIndex = 0;
+
+		if (myfloor.house.floors.Count > 1)
+		{
+			nxtIndex = myfloor.index + roamDir;
+			floorIdx += roamDir;
+
+			if (floorIdx >= myfloor.house.floors.Count)
+			{
+				floorIdx -= 2;
+				nxtIndex = myfloor.house.floors[floorIdx].index;
+				roamDir = -1;
+			}
+			else if (floorIdx < 0)
+			{
+				floorIdx += 1;
+				nxtIndex = myfloor.house.floors[floorIdx].index;
+				roamDir = 1;
+			}
+
+			nextPlaces.Add(new Place(nxtIndex, myfloor.house.floors[floorIdx].leftMost.position));
+			nextPlaces.Add(new Place(nxtIndex, myfloor.house.floors[floorIdx].rightMost.position));
+		}
+		else
+		{
+			nextPlaces.Add(new Place(myfloor.index, myfloor.leftMost.position));
+			nextPlaces.Add(new Place(myfloor.index, myfloor.rightMost.position));
+		}
+
+		pathfind = true;
+		roaming = true;
+		go = false;
 	}
 
 	private void EnableShooting()
@@ -176,6 +250,7 @@ public class EnemyController : MonoBehaviour
 			self.StopMovingRight();
 			self.StopMovingLeft();
 			go = false;
+			arrived = true;
 		}
 	}
 
@@ -232,7 +307,8 @@ public class EnemyController : MonoBehaviour
 		if (collision.gameObject.layer == 10)
 		{
 			targetFound = false;
-			GotoPlace();
+			dontShoot = true;
+			Roam();
 		}
 	}
 	#endregion

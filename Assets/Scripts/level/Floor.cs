@@ -31,6 +31,10 @@ public class Floor : MonoBehaviour
 	//[Header("GO, Transforms")]
 	public StairCase go_up_stairs;
 	public StairCase go_down_stairs;
+
+	public House house;
+
+	public Transform leftMost, rightMost;
 	#endregion
 
 	#region PrivateVars
