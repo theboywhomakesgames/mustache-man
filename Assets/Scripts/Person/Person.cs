@@ -24,18 +24,20 @@ public class Person : SimpleObj
 	public bool isAlive = true;
 	public bool movingRight, movingLeft;
 	[Header("GO, Transforms")]
-	public Animator animator;
-	public Transform righthandPos, rightArm;
-	public InteractableObj rightHandContaining;
 	public Vector2 target;
-	public GameObject bloodDropPref, bloodPSPref;
-	public EventHolder onDeath, onDamage;
-
-	public List<InteractiveObj> nearbyInteractives = new List<InteractiveObj>();
-
 	public Vector2 gravity;
 
+	public Transform righthandPos, rightArm;
+
+	public GameObject bloodDropPref, bloodPSPref;
+
+	public Animator animator;
+
+	public EventHolder onDeath, onDamage;
 	public AudioClip walkclip, jumpclip;
+	public InteractableObj rightHandContaining;
+	public List<InteractiveObj> nearbyInteractives = new List<InteractiveObj>();
+	public WTF wtf;
 	#endregion
 
 	#region PrivateVars
@@ -60,6 +62,10 @@ public class Person : SimpleObj
 	#endregion
 
 	#region PublicFunctions
+	public void WTF()
+	{
+		wtf.Play();
+	}
 
 	public void PlayJumpSFX()
 	{
@@ -283,6 +289,7 @@ public class Person : SimpleObj
 		if (isAlive)
 		{
 			isAlive = false;
+			wtf.Disable();
 			if (rightHandFull)
 			{
 				rightHandContaining.GetDropped(new Vector2(UnityEngine.Random.Range(-1, 1f), UnityEngine.Random.Range(-1, 1f)).normalized);

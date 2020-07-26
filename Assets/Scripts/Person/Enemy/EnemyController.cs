@@ -42,6 +42,16 @@ public class EnemyController : MonoBehaviour
 	#endregion
 
 	#region PublicFunctions
+	public void Suspect(Place newPlace)
+	{
+		if (self.isAlive)
+		{
+			self.wtf.Play();
+			nextPlace = newPlace;
+			pathfind = true;
+		}
+	}
+
 	public void GotoPlace()
 	{
 		if(nextPlace.flooridx == myfloor.index)
@@ -58,7 +68,6 @@ public class EnemyController : MonoBehaviour
 			interactiveNP = true;
 			go = true;
 		}
-
 		arrived = false;
 	}
 	#endregion

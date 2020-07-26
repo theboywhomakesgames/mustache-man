@@ -93,8 +93,8 @@ public class BasicGun : InteractableObj
 			if(c.gameObject.layer == 9)
 			{
 				EnemyController ec = c.GetComponent<EnemyController>();
-				ec.nextPlace = new Place(flooridx, transform.position);
-				ec.pathfind = true;
+				Place np = new Place(flooridx, transform.position);
+				ec.Suspect(np);
 			}
 		}
 	}
