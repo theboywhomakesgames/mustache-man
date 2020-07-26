@@ -358,5 +358,19 @@ public class EnemyController : MonoBehaviour
 			Roam();
 		}
 	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		if(collision.gameObject.layer == 14)
+		{
+			try
+			{
+				Door d = collision.gameObject.transform.parent.GetComponent<Door>();
+				if (!d.isOpen)
+					d.Interact(self);
+			}
+			catch { }
+		}
+	}
 	#endregion
 }
