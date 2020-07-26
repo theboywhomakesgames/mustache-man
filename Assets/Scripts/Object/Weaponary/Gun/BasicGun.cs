@@ -26,6 +26,7 @@ public class BasicGun : InteractableObj
 	public Sprite inHandSprite, droppedSprite;
 	public SpriteRenderer sr;
 	public GameObject shootingLight;
+	public AudioClip shootingSFX;
 	#endregion
 
 	#region PrivateVars
@@ -35,9 +36,18 @@ public class BasicGun : InteractableObj
 	//[Header("bools")]
 	private bool _isCoolingDown;
 	//[Header("GO, Transforms")]
+	protected bool hasPlayer = false;
+	protected AudioPlayer ap;
 	#endregion
 
 	#region PublicFunctions
+	public void PlayShooingSFX()
+	{
+		if (!hasPlayer)
+			GetAudioPlayer();
+
+		ap.as_.PlayOneShot(shootingSFX);
+	}
 
 	public override void InteractWith()
 	{
@@ -55,6 +65,7 @@ public class BasicGun : InteractableObj
 			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
 			shootingLight.SetActive(true);
 			Invoke(nameof(TurnOffLight), shootingLightDuration);
+			PlayShooingSFX();
 			MakeNoise();
 			blt.GetComponent<SimpleBullet>().GetShot(diff);
 		}
@@ -129,6 +140,11 @@ public class BasicGun : InteractableObj
 				_isCoolingDown = false;
 			}
 		}
+	}
+	protected void GetAudioPlayer()
+	{
+		ap = AudioManager.instance.GetPlayer("SFX");
+		hasPlayer = true;
 	}
 	#endregion
 }

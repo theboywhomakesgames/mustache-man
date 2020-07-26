@@ -34,6 +34,8 @@ public class Person : SimpleObj
 	public List<InteractiveObj> nearbyInteractives = new List<InteractiveObj>();
 
 	public Vector2 gravity;
+
+	public AudioClip walkclip, jumpclip;
 	#endregion
 
 	#region PrivateVars
@@ -52,16 +54,35 @@ public class Person : SimpleObj
 	protected Vector2 newVel;
 	protected Vector2 acceleration;
 	protected Vector2 myRight = Vector2.right;
+
+	protected bool hasPlayer = false;
+	protected AudioPlayer ap;
 	#endregion
 
 	#region PublicFunctions
 
+	public void PlayJumpSFX()
+	{
+		if (!hasPlayer)
+			GetAudioPlayer();
+
+		ap.as_.PlayOneShot(jumpclip);
+	}
+
+	public void PlayWalkSFX()
+	{
+		if (!hasPlayer)
+			GetAudioPlayer();
+
+		ap.as_.PlayOneShot(walkclip);
+	}
+
 	public void Jump()
 	{
-		if(isAlive)
+		if(isAlive && grounded)
 		{
-			if (grounded)
-				rb.velocity = new Vector2(rb.velocity.x, rb.gravityScale * jumpSpeed);
+			rb.velocity = new Vector2(rb.velocity.x, rb.gravityScale * jumpSpeed);
+			PlayJumpSFX();
 		}
 	}
 
@@ -312,6 +333,12 @@ public class Person : SimpleObj
 	{
 		collidings--;
 		grounded = collidings > 0;
+	}
+
+	protected void GetAudioPlayer()
+	{
+		ap = AudioManager.instance.GetPlayer("SFX");
+		hasPlayer = true;
 	}
 	#endregion
 }

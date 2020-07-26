@@ -197,6 +197,7 @@ MonoBehaviour:
   colliders: {fileID: 7910694476592027410}
   coolDown: 0.5
   shootingLightDuration: 0.01
+  shootingSoundRadius: 4
   clipSize: 10
   bulletPrefab: {fileID: 1824596458444392668, guid: 4019cc3140198164b8823aafc6872f9a,
     type: 3}
@@ -207,6 +208,7 @@ MonoBehaviour:
     type: 3}
   sr: {fileID: 5856411342013192539}
   shootingLight: {fileID: 891489142}
+  shootingSFX: {fileID: 8300000, guid: 9da1604c7be1bee40a02555a20660829, type: 3}
 --- !u!1 &5856411342055209404
 GameObject:
   m_ObjectHideFlags: 0

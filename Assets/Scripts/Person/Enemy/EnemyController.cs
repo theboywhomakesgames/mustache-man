@@ -112,13 +112,28 @@ public class EnemyController : MonoBehaviour
 		nextPlace.location = intruder.position;
 		Chase(targetDiff);
 		self.AimAt(targetDiff.normalized);
-		if (!dontShoot)
+
+		RaycastHit2D[] hits = Physics2D.RaycastAll(self.rightHandContaining.transform.position, targetDiff, 5);
+		foreach (RaycastHit2D hit in hits)
 		{
-			Shoot();
-		}
-		else
-		{
-			Invoke(nameof(EnableShooting), 0.5f);
+			if (hit.collider.isTrigger)
+				continue;
+
+			int layer = hit.collider.gameObject.layer;
+			if (layer != 10 && layer != 9 && layer != 12)
+				break;
+
+			if (layer == 10)
+			{
+				if (!dontShoot)
+				{
+					Shoot();
+				}
+				else
+				{
+					Invoke(nameof(EnableShooting), 0.5f);
+				}
+			}
 		}
 	}
 
@@ -296,16 +311,39 @@ public class EnemyController : MonoBehaviour
 	{
 		if (collision.gameObject.layer == 10)
 		{
-			targetFound = true;
-			nextPlace = new Place(myfloor.index, collision.transform.position);
 			intruder = collision.transform;
+			InvokeRepeating(nameof(CheckSight), 0f, 0.5f);
 		}
+	}
+
+	private void CheckSight()
+	{
+		Vector2 targetDiff = intruder.position - transform.position;
+		RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetDiff);
+		foreach (RaycastHit2D hit in hits)
+		{
+			if (hit.collider.isTrigger)
+				continue;
+
+			int layer = hit.collider.gameObject.layer;
+			if (layer != 10 && layer != 9 && layer != 12)
+				break;
+
+			if (layer == 10)
+			{
+				targetFound = true;
+				return;
+			}
+		}
+
+
 	}
 
 	private void TriggerExitCB(Collider2D collision)
 	{
-		if (collision.gameObject.layer == 10)
+		if (collision.gameObject.layer == 10 && targetFound)
 		{
+			CancelInvoke(nameof(CheckSight));
 			targetFound = false;
 			dontShoot = true;
 			Roam();
