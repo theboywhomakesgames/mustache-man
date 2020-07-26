@@ -44,6 +44,35 @@ public class MainCharacter : Person
 
 	protected override void Die()
 	{
+		if (isAlive)
+		{
+			Invoke(nameof(Restart), 2f);
+
+			isAlive = false;
+			if (rightHandFull)
+			{
+				rightHandContaining.GetDropped(new Vector2(UnityEngine.Random.Range(-1, 1f), UnityEngine.Random.Range(-1, 1f)).normalized);
+			}
+
+			rb.constraints = RigidbodyConstraints2D.None;
+			Instantiate(bloodDropPref, lastAssualtPos, Quaternion.identity).GetComponent<BloodDrop>().Throw(lastAssualtDir);
+			Instantiate(bloodPSPref, lastAssualtPos, Quaternion.identity);
+			Vector2 dir = ((Vector2)transform.position - lastAssualtPos).normalized;
+			rb.AddForceAtPosition(lastAssualtDir * 1000 * deathKick * 0.01f / Time.fixedDeltaTime, lastAssualtPos);
+			StopMovingLeft();
+			StopMovingRight();
+			animator.speed = 0;
+
+			try
+			{
+				onDeath.Excecute();
+			}
+			catch { }
+		}
+	}
+
+	protected void Restart()
+	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
