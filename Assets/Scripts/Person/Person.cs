@@ -21,7 +21,7 @@ public class Person : SimpleObj
 	//[Header("ints")]
 	[Header("bools")]
 	public bool rightHandFull;
-	public bool isAlive = true;
+	public bool isAlive = true, isPlayer = false;
 	public bool movingRight, movingLeft;
 	[Header("GO, Transforms")]
 	public Vector2 target;
@@ -321,7 +321,7 @@ public class Person : SimpleObj
 		base.Start();
 		if (rightHandFull)
 		{
-			rightHandContaining.GetPickedUpBy(this);
+			rightHandContaining.GetPickedUpBy(this, isPlayer);
 		}
 	}
 

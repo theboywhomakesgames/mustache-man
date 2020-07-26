@@ -198,7 +198,9 @@ MonoBehaviour:
   coolDown: 0.5
   shootingLightDuration: 0.01
   shootingSoundRadius: 4
+  betweenReloads: 3
   clipSize: 10
+  remainingBullets: 10
   bulletPrefab: {fileID: 1824596458444392668, guid: 4019cc3140198164b8823aafc6872f9a,
     type: 3}
   hole: {fileID: 5856411342055209407}

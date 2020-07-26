@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class BasicGun : InteractableObj
 {
@@ -17,8 +18,10 @@ public class BasicGun : InteractableObj
 	public float coolDown;
 	public float shootingLightDuration = 0.1f;
 	public float shootingSoundRadius = 4;
+	public float betweenReloads = 3;
 	[Header("ints")]
 	public int clipSize = 10;
+	public int remainingBullets = 0;
 	//[Header("bools")]
 	[Header("GO, Transforms")]
 	public GameObject bulletPrefab;
@@ -54,9 +57,26 @@ public class BasicGun : InteractableObj
 		Shoot();
 	}
 
+	public void SetUI()
+	{
+		if(isPlayerHeld)
+			GunUI.SetTXT(remainingBullets, clipSize);
+	}
+
+	public void Reload()
+	{
+		Invoke(nameof(ResetClip), betweenReloads);
+	}
+
+	public void ResetClip()
+	{
+		remainingBullets = clipSize;
+		SetUI();
+	}
+
 	public void Shoot()
 	{
-		if (!_isCoolingDown)
+		if (!_isCoolingDown && remainingBullets > 0)
 		{
 			_time = 0;
 			_isCoolingDown = true;
@@ -68,6 +88,13 @@ public class BasicGun : InteractableObj
 			PlayShooingSFX();
 			MakeNoise();
 			blt.GetComponent<SimpleBullet>().GetShot(diff);
+
+			remainingBullets--;
+			SetUI();
+			if(remainingBullets <= 0)
+			{
+				Reload();
+			}
 		}
 	}
 
@@ -104,10 +131,16 @@ public class BasicGun : InteractableObj
 		transform.right = towards;
 	}
 
-	public override void GetPickedUpBy(Person picker)
+	public override void GetPickedUpBy(Person picker, bool isPlayer = false)
 	{
 		sr.sprite = inHandSprite;
-		base.GetPickedUpBy(picker);
+		base.GetPickedUpBy(picker, isPlayer);
+
+		if (isPlayerHeld)
+		{
+			GunUI.SetGun(droppedSprite, gameObject.name);
+			SetUI();
+		}
 	}
 
 	public override void GetDropped(Vector2 force)

@@ -12,14 +12,15 @@ namespace Assets.Scripts.Object
         public Person holder;
 		public GameObject colliders;
 
-		private bool hasHolder = false;
+		protected bool hasHolder = false;
+		protected bool isPlayerHeld = false;
 
 		public virtual void InteractWith()
 		{
 
 		}
 
-		public virtual void GetPickedUpBy(Person picker)
+		public virtual void GetPickedUpBy(Person picker, bool isPlayer = false)
 		{
 			try
 			{
@@ -31,6 +32,11 @@ namespace Assets.Scripts.Object
 			holder = picker;
 			transform.parent = picker.righthandPos;
 			transform.localPosition = Vector3.zero;
+
+			if (isPlayer)
+			{
+				isPlayerHeld = true;
+			}
 		}
 
 		public virtual void GetDropped(Vector2 force)
