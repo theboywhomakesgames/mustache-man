@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 891489143}
   - component: {fileID: 891489144}
-  m_Layer: 10
+  m_Layer: 12
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 5856411342013192539}
   - component: {fileID: 5856411342013192541}
   - component: {fileID: 5856411342013192538}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5856411342055209407}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}

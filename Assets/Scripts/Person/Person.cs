@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Person : SimpleObj
@@ -18,6 +16,7 @@ public class Person : SimpleObj
 	public float health = 100;
 	public float moveSpeed = 10, jumpSpeed = 15, gravityMagnitude = 20;
 	public float deathKick = 50;
+	public float armsReach = 1f;
 	//[Header("ints")]
 	[Header("bools")]
 	public bool rightHandFull;
@@ -234,12 +233,28 @@ public class Person : SimpleObj
 
 	public void PickUp()
 	{
+		Collider2D[] colliders_ = Physics2D.OverlapCircleAll(transform.position, armsReach);
+		foreach(Collider2D c in colliders_)
+		{
+			if(c.gameObject.layer == 12)
+			{
+				print("found something");
+				InteractableObj obj = c.GetComponent<InteractableObj>();
+				if (obj == null)
+					obj = c.transform.parent.GetComponent<InteractableObj>();
 
+				PickUp(obj);
+				return;
+			}
+		}
 	}
 
-	public void PickUp(SimpleObj obj)
+	public void PickUp(InteractableObj obj)
 	{
-
+		if (!rightHandFull)
+		{
+			obj.GetPickedUpBy(this, isPlayer);
+		}
 	}
 
 	public void InteractWithNearby()
@@ -248,7 +263,17 @@ public class Person : SimpleObj
 		{
 			nearbyInteractives[0].Interact(this);
 		}
-		catch { }
+		catch
+		{
+			if (rightHandFull)
+			{
+				rightHandContaining.GetDropped(new Vector2(UnityEngine.Random.Range(-1, 1), UnityEngine.Random.Range(-1, 1)));
+			}
+			else
+			{
+				PickUp();
+			}
+		}
 	}
 
 	public virtual void Damage(float volume, float x = 0, float y = 0, float bx = 0, float by = 0)
@@ -264,6 +289,11 @@ public class Person : SimpleObj
 		catch { }
 
 		CheckHealth();
+
+		Instantiate(bloodDropPref, lastAssualtPos, Quaternion.identity).GetComponent<BloodDrop>().Throw(lastAssualtDir);
+		Instantiate(bloodPSPref, lastAssualtPos, Quaternion.identity);
+		Vector2 dir = ((Vector2)transform.position - lastAssualtPos).normalized;
+		rb.AddForceAtPosition(lastAssualtDir * 1000 * deathKick * 0.01f / Time.fixedDeltaTime, lastAssualtPos);
 	}
 
 	public virtual void ReverseGravity()
@@ -295,10 +325,6 @@ public class Person : SimpleObj
 				rightHandContaining.GetDropped(new Vector2(UnityEngine.Random.Range(-1, 1f), UnityEngine.Random.Range(-1, 1f)).normalized);
 			}
 			rb.constraints = RigidbodyConstraints2D.None;
-			Instantiate(bloodDropPref, lastAssualtPos, Quaternion.identity).GetComponent<BloodDrop>().Throw(lastAssualtDir);
-			Instantiate(bloodPSPref, lastAssualtPos, Quaternion.identity);
-			Vector2 dir = ((Vector2)transform.position - lastAssualtPos).normalized;
-			rb.AddForceAtPosition(lastAssualtDir * 1000 * deathKick * 0.01f / Time.fixedDeltaTime, lastAssualtPos);
 			StopMovingLeft();
 			StopMovingRight();
 			animator.speed = 0;
@@ -346,6 +372,13 @@ public class Person : SimpleObj
 	{
 		ap = AudioManager.instance.GetPlayer("SFX");
 		hasPlayer = true;
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = new Color(0, 0, 0, 0.1f);
+		Gizmos.DrawWireSphere(transform.position, armsReach);
+		Gizmos.color = Color.white;
 	}
 	#endregion
 }

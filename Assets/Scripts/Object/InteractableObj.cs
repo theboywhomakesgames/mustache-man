@@ -28,10 +28,17 @@ namespace Assets.Scripts.Object
 			}
 			catch { }
 			rb.bodyType = RigidbodyType2D.Kinematic;
+
+			picker.rightHandFull = true;
+			picker.rightHandContaining = this;
+
 			hasHolder = true;
 			holder = picker;
+
 			transform.parent = picker.righthandPos;
 			transform.localPosition = Vector3.zero;
+			transform.localScale = new Vector3(1, 1, 1);
+			transform.localRotation = Quaternion.Euler(0, 0, 0);
 
 			if (isPlayer)
 			{
