@@ -14,7 +14,8 @@ public class TimeTweaker : MonoBehaviour
 	#region PublicVars
 	[Header("floats")]
 	public float sloMoFactor = 0.1f;
-	public float transitionDuration = 0.5f;
+	public float transitionDuration = 0.5f, dividerSoftner = 0.3f;
+	public float divider = 1;
 	//[Header("ints")]
 	//[Header("bools")]
 	//[Header("GO, Transforms")]
@@ -56,6 +57,26 @@ public class TimeTweaker : MonoBehaviour
 		Time.fixedDeltaTime = 0.01f;
 		print(scaleRatio);
 		NormalizeTS();
+	}
+
+	private void Update()
+	{
+		float delta = Input.mouseScrollDelta.y;
+		if(delta != 0)
+		{
+			divider -= dividerSoftner * delta;
+			divider = Mathf.Clamp(divider, 1f, 20f);
+			Tweak();
+		}
+	}
+
+	private void Tweak()
+	{
+		if (isSlow)
+		{
+			Time.timeScale = sloMoFactor / divider;
+			Time.fixedDeltaTime = sloMoFactor * scaleRatio / divider;
+		}
 	}
 
 	private void KillTweeners()

@@ -46,7 +46,7 @@ public class Person : SimpleObj
 	//[Header("bools")]
 	protected bool isFacingRight = true;
 	protected bool isRunning, isJumping, isSliding;
-	protected bool grounded, flipped;
+	protected bool grounded, flipped, isVis = true;
 	//[Header("GO, Transforms")]
 	protected Vector2 lastAssualtPos;
 	protected Vector2 lastAssualtDir;
@@ -71,7 +71,8 @@ public class Person : SimpleObj
 		if (!hasPlayer)
 			GetAudioPlayer();
 
-		ap.as_.PlayOneShot(jumpclip);
+		if(isVis)
+			ap.as_.PlayOneShot(jumpclip);
 	}
 
 	public void PlayWalkSFX()
@@ -79,7 +80,8 @@ public class Person : SimpleObj
 		if (!hasPlayer)
 			GetAudioPlayer();
 
-		ap.as_.PlayOneShot(walkclip);
+		if(isVis)
+			ap.as_.PlayOneShot(walkclip);
 	}
 
 	public void Jump()
@@ -379,6 +381,16 @@ public class Person : SimpleObj
 		Gizmos.color = new Color(0, 0, 0, 0.1f);
 		Gizmos.DrawWireSphere(transform.position, armsReach);
 		Gizmos.color = Color.white;
+	}
+
+	private void OnBecameVisible()
+	{
+		isVis = true;	
+	}
+
+	private void OnBecameInvisible()
+	{
+		isVis = false;
 	}
 	#endregion
 }

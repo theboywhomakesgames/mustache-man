@@ -21,7 +21,7 @@ public class BasicGun : InteractableObj
 	public float betweenReloads = 3;
 	[Header("ints")]
 	public int clipSize = 10;
-	public int remainingBullets = 0;
+	public int remainingBullets = 0, magzLeft = 2;
 	//[Header("bools")]
 	[Header("GO, Transforms")]
 	public GameObject bulletPrefab;
@@ -60,7 +60,7 @@ public class BasicGun : InteractableObj
 	public void SetUI()
 	{
 		if(isPlayerHeld)
-			GunUI.SetTXT(remainingBullets, clipSize);
+			GunUI.SetTXT(remainingBullets, clipSize * magzLeft);
 	}
 
 	public void Reload()
@@ -71,6 +71,7 @@ public class BasicGun : InteractableObj
 	public void ResetClip()
 	{
 		remainingBullets = clipSize;
+		magzLeft--;
 		SetUI();
 	}
 
@@ -147,6 +148,11 @@ public class BasicGun : InteractableObj
 	{
 		sr.sprite = droppedSprite;
 		base.GetDropped(force);
+		if (isPlayerHeld)
+		{
+			GunUI.SetGun(null, "nothing");
+			GunUI.SetTXT(0, 0);
+		}
 	}
 	#endregion
 
