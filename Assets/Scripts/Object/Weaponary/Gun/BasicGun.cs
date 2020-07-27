@@ -19,9 +19,11 @@ public class BasicGun : InteractableObj
 	public float shootingLightDuration = 0.1f;
 	public float shootingSoundRadius = 4;
 	public float betweenReloads = 3;
+	[Range(0f, 1f)]
+	public float spread = 1, recoil = 1;
 	[Header("ints")]
 	public int clipSize = 10;
-	public int remainingBullets = 0, magzLeft = 2;
+	public int remainingBullets = 0, magzLeft = 2, chunckSize = 1;
 	//[Header("bools")]
 	[Header("GO, Transforms")]
 	public GameObject bulletPrefab;
@@ -81,21 +83,36 @@ public class BasicGun : InteractableObj
 		{
 			_time = 0;
 			_isCoolingDown = true;
-			Vector2 diff = holder.target - (Vector2)holder.rightArm.position;
-			diff = diff.normalized;
-			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
-			shootingLight.SetActive(true);
-			Invoke(nameof(TurnOffLight), shootingLightDuration);
+
+			SpawnBullets();
+
 			PlayShooingSFX();
 			MakeNoise();
-			blt.GetComponent<SimpleBullet>().GetShot(diff);
+			Invoke(nameof(TurnOffLight), shootingLightDuration);
 
 			remainingBullets--;
 			SetUI();
-			if(remainingBullets <= 0)
+			if (remainingBullets <= 0)
 			{
 				Reload();
 			}
+		}
+	}
+
+	private void SpawnBullets()
+	{
+		Vector2 diff = holder.target - (Vector2)holder.rightArm.position;
+		diff = diff.normalized;
+
+		for (int i = -chunckSize / 2; i < chunckSize / 2; i++)
+		{
+			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
+			shootingLight.SetActive(true);
+
+			Vector2 dir = diff + new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized * recoil;
+			dir = Quaternion.Euler(0, 0, i * 30 * spread) * dir;
+
+			blt.GetComponent<SimpleBullet>().GetShot(dir);
 		}
 	}
 
