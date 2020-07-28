@@ -48,3 +48,7 @@ MonoBehaviour:
     isMouse: 0
     key: 102
     mouseButton: 0
+  slide:
+    isMouse: 0
+    key: 304
+    mouseButton: 0

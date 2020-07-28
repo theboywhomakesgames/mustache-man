@@ -76,6 +76,11 @@ public class InputManager : MonoBehaviour
 			controller.InteractWithNearby();
 		}
 
+		if (Input.GetKeyDown(im.slide.key))
+		{
+			controller.Slide();
+		}
+
 		if (Input.GetKeyDown(im.reverseGravity.key))
 		{
 			controller.ReverseGravity();

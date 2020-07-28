@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,15 +14,19 @@ public class MainCharacter : Person
 
 	#region PublicVars
 	//[Header("floats")]
+	public float slideDuration;
+	public float slideOffsetY = 0.2f;
 	//[Header("ints")]
 	[Header("bools")]
 	public bool nothing;
 	//[Header("GO, Transforms")]
 	public Transform indicator;
+	public CapsuleCollider2D capsuleCollider;
 	#endregion
 
 	#region PrivateVars
 	//[Header("floats")]
+	private float defYSize = 0;
 	//[Header("ints")]
 	//[Header("bools")]
 	//[Header("GO, Transforms")]
@@ -32,6 +37,31 @@ public class MainCharacter : Person
 	public void SlowMoSwitch()
 	{
 		tt.Switch();
+	}
+
+	public override void Slide()
+	{
+		int dir = movingRight ? 1 : movingLeft ? -1 : 0;
+		if (dir != 0 && !isSliding)
+		{
+			isSliding = true;
+			rb.velocity += new Vector2(dir * 2 * moveSpeed, 0);
+			animator.SetBool("Sliding", true);
+
+			defYSize = capsuleCollider.size.y;
+			capsuleCollider.size = new Vector2(capsuleCollider.size.x * 3, 0.2f);
+			DOTween.To(() => capsuleCollider.offset, (x) => { capsuleCollider.offset = x; }, new Vector2(capsuleCollider.offset.x, capsuleCollider.offset.y - slideOffsetY), slideDuration/2);
+
+			Invoke(nameof(EndSlide), slideDuration);
+		}
+	}
+
+	public void EndSlide()
+	{
+		isSliding = false;
+		DOTween.To(() => capsuleCollider.size, (x) => { capsuleCollider.size = x; }, new Vector2(capsuleCollider.size.x / 3, defYSize), 0.5f);
+		DOTween.To(() => capsuleCollider.offset, (x) => { capsuleCollider.offset = x; }, new Vector2(capsuleCollider.offset.x, capsuleCollider.offset.y + slideOffsetY), slideDuration / 2);
+		animator.SetBool("Sliding", false);
 	}
 	#endregion
 

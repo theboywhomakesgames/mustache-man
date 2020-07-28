@@ -28,8 +28,15 @@ public class GunUI : MonoBehaviour
 	{
 		if (hasInstance)
 		{
+			if (gunImage == null)
+			{
+				instance.image.sprite = instance.emptyHands;
+			}
+			else
+			{
+				instance.image.sprite = gunImage;
+			}
 			instance.title.text = title;
-			instance.image.sprite = gunImage;
 		}
 		else
 		{
@@ -47,6 +54,8 @@ public class GunUI : MonoBehaviour
 
 	public Text title;
 	public Text clipTxt;
+
+	public Sprite emptyHands;
 	#endregion
 
 	#region PrivateVars

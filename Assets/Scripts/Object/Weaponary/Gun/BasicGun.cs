@@ -104,7 +104,7 @@ public class BasicGun : InteractableObj
 		Vector2 diff = holder.target - (Vector2)holder.rightArm.position;
 		diff = diff.normalized;
 
-		for (int i = -chunckSize / 2; i < chunckSize / 2; i++)
+		for (int i = -chunckSize / 2; i < chunckSize / 2 + 1; i++)
 		{
 			GameObject blt = Instantiate(bulletPrefab, hole.position, Quaternion.FromToRotation(Vector3.right, diff));
 			shootingLight.SetActive(true);

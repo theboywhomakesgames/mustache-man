@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1824596458444392670}
-  shootSpeed: 40
+  shootSpeed: 20
   damage: 100
   testing: 1
   sparkPrefab: {fileID: 889289218278282137, guid: 0b23d47e9a034cf4c9c354d14f7b5126,

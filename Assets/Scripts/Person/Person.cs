@@ -278,6 +278,11 @@ public class Person : SimpleObj
 		}
 	}
 
+	public virtual void Slide()
+	{
+
+	}
+
 	public virtual void Damage(float volume, float x = 0, float y = 0, float bx = 0, float by = 0)
 	{
 		health -= volume;
